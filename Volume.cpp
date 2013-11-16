@@ -465,7 +465,7 @@ int Volume::mountVol() {
                     return -1;
                 }
 
-                if (Ext4::doMount(devicePath, getMountpoint(), false, false, false)) {
+                if (Ext4::doMount(devicePath, getMountpoint(), false, false, false, true)) {
                     SLOGE("%s failed to mount via EXT4 (%s)\n", devicePath, strerror(errno));
                     continue;
                 }
@@ -515,12 +515,14 @@ int Volume::mountVol() {
 
         protectFromAutorunStupidity();
 
+#ifndef MINIVOLD
         if (providesAsec && mountAsecExternal() != 0) {
             SLOGE("Failed to mount secure area (%s)", strerror(errno));
             umount(getMountpoint());
             setState(Volume::State_Idle);
             return -1;
         }
+#endif
 
         char service[64];
         snprintf(service, 64, "fuse_%s", getLabel());
