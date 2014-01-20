@@ -25,6 +25,10 @@
 #define VOLD_MAX_PARTITIONS 34
 #endif
 
+#if defined(VOLD_DISC_HAS_MULTIPLE_MAJORS) && !defined(VOLD_INTERNAL_VOLUME)
+#define VOLD_INTERNAL_VOLUME "sdcard0"
+#endif
+
 typedef android::List<char *> PathCollection;
 
 class DirectVolume : public Volume {
